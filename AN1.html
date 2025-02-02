@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a363d9 100%);
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .drop-zone {
+            border: 2px dashed #6c5ce7;
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fe;
+        }
+
+        .drop-zone:hover {
+            border-color: #a363d9;
+            background: #f0f2ff;
+        }
+
+        .drop-zone.dragover {
+            background: #eceeff;
+            border-color: #a363d9;
+            transform: scale(1.02);
+        }
+
+        .drop-zone p {
+            font-size: 1.1rem;
+            color: #4834d4;
+        }
+
+        .map-container {
+            height: 450px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-btn.active {
+            background: #6c5ce7;
+            color: white;
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .media-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .media-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .media-content {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .media-info {
+            padding: 1.2rem;
+        }
+
+        .media-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #2d3436;
+        }
+
+        .media-info p {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin-bottom: 0.3rem;
+        }
+
+        .error-message {
+            background: #fff5f5;
+            color: #e53e3e;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .loading-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f0f2ff;
+            border-top: 3px solid #6c5ce7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Info Window Styling */
+        .gm-style-iw {
+            padding: 1rem !important;
+        }
+
+        .info-window-content {
+            max-width: 250px;
+        }
+
+        .info-window-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #2d3436;
+        }
+
+        .info-window-content img,
+        .info-window-content video {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .map-container {
+                height: 350px;
+            }
+
+            .media-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .drop-zone {
+                padding: 1.5rem;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Media Tracker</h1>
+        <p>Track and map your photos and videos</p>
+    </div>
+
+    <div class="container">
+        <div class="upload-section">
+            <div class="drop-zone" id="dropZone">
+                <p>Drag and drop files here or click to upload</p>
+                <input type="file" id="mediaInput" accept="image/*,video/*" multiple style="display: none">
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+            <div class="loading-spinner" id="loadingSpinner"></div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="image">Photos</button>
+            <button class="filter-btn" data-filter="video">Videos</button>
+            <button class="filter-btn" data-filter="recent">Recent</button>
+        </div>
+
+        <div class="media-grid" id="mediaGrid"></div>
+    </div>
+
+    <script>
+        let map;
+        let markers = [];
+        const mediaItems = [];
+
+        // Initialize map
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 2,
+                center: { lat: 0, lng: 0 },
+                styles: [
+                    {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [{ visibility: "off" }]
+                    }
+                ]
+            });
+        }
+
+        // Setup drag and drop
+        const dropZone = document.getElementById('dropZone');
+        const mediaInput = document.getElementById('mediaInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        dropZone.addEventListener('click', () => mediaInput.click());
+       
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        mediaInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            errorMessage.style.display = 'none';
+            loadingSpinner.style.display = 'block';
+
+            Array.from(files).forEach(file => {
+                if (!file.type.match('image/*') && !file.type.match('video/*')) {
+                    showError('Please upload only images or videos');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const mediaItem = {
+                        type: file.type.startsWith('image/') ? 'image' : 'video',
+                        url: e.target.result,
+                        name: file.name,
+                        date: new Date().toLocaleDateString(),
+                        location: getRandomLocation() // In a real app, extract from EXIF data
+                    };
+
+                    mediaItems.push(mediaItem);
+                    addMediaToGrid(mediaItem);
+                    addMarkerToMap(mediaItem);
+                };
+
+                reader.onerror = () => {
+                    showError('Error reading file');
+                };
+
+                reader.readAsDataURL(file);
+            });
+
+            loadingSpinner.style.display = 'none';
+        }
+
+        function getRandomLocation() {
+            return {
+                lat: Math.random() * 180 - 90,
+                lng: Math.random() * 360 - 180
+            };
+        }
+
+        function addMediaToGrid(mediaItem) {
+            const grid = document.getElementById('mediaGrid');
+            const mediaElement = document.createElement('div');
+            mediaElement.className = 'media-item';
+            mediaElement.dataset.type = mediaItem.type;
+
+            const content = mediaItem.type === 'image'
+                ? `<img src="${mediaItem.url}" class="media-content" alt="${mediaItem.name}">`
+                : `<video src="${mediaItem.url}" class="media-content" controls></video>`;
+
+            mediaElement.innerHTML = `
+                ${content}
+                <div class="media-info">
+                    <h3>${mediaItem.name}</h3>
+                    <p>${mediaItem.date}</p>
+                    <p>Lat: ${mediaItem.location.lat.toFixed(4)}, Lng: ${mediaItem.location.lng.toFixed(4)}</p>
+                </div>
+            `;
+
+            grid.appendChild(mediaElement);
+        }
+
+        function addMarkerToMap(mediaItem) {
+            const marker = new google.maps.Marker({
+                position: mediaItem.location,
+                map: map,
+                title: mediaItem.name,
+                icon: mediaItem.type === 'image'
+                    ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                    : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            });
+
+            markers.push(marker);
+
+            marker.addListener('click', () => {
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="max-width: 200px;">
+                            <h3>${mediaItem.name}</h3>
+                            <p>${mediaItem.date}</p>
+                            ${mediaItem.type === 'image'
+                                ? `<img src="${mediaItem.url}" style="max-width: 100%; height: auto;">`
+                                : `<video src="${mediaItem.url}" style="max-width: 100%;" controls></video>`}
+                        </div>
+                    `
+                });
+                infoWindow.open(map, marker);
+            });
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            loadingSpinner.style.display = 'none';
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelector('.filter-btn.active').classList.remove('active');
+                this.classList.add('active');
+               
+                const filter = this.dataset.filter;
+                const items = document.querySelectorAll('.media-item');
+
+                items.forEach(item => {
+                    if (filter === 'all' || item.dataset.type === filter) {
+                        item.style.display = '';
+                    } else if (filter === 'recent') {
+                        // Show only items from the last 24 hours
+                        item.style.display = 'none'; // Implement proper date filtering if needed
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Initialize map when page loads
+        window.onload = initMap;
+    </script>
+</body>
+</html>
