@@ -1,40 +1,40 @@
-# [Project Name] 🎯
+MEDIA TRACKER🎯
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: [TEAM CODEX]
 
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Member 1: [ANN MILENA J] - [AHALIA SCHOOL OF ENGINEERINF AND TECHNOLOGY]
+- Member 2: [NEHA U] - [AHALIA SCHOOL OF ENGINEERINF AND TECHNOLOGY]
+  
 
 ### Hosted Project Link
 [mention your project hosted project link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+Data privacy concerns
+webiste for tracking the data breach in social media
 
 ### The Problem statement
-[What ridiculous problem are you solving?]
+A real-time problem photos and video breach in social media
 
 ### The Solution
-[How are you solving it? Keep it fun!]
+Install a imbuilt website for tracking current location while the third party unauthorized bugging of our personal photos and videos.
 
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Languages used]
-- [Frameworks used]
-- [Libraries used]
-- [Tools used]
+[HTML,CSS,JAVASCRIPT]
+[No fronted framework are explicitly used,but google maps api intergration is visible]
+[google map javascript api]
+[Browser developer tools,code editors,api integration,file reader api]
 
 For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
-
+[Header section,upload section,map container,map filters,media grid,error handling,javascript funcations]
+[Frontend features,media handling,map integration,responsive design]
+[development tools,apis and libraries,testing and debugging,hosting and deployment]
 ### Implementation
 For Software:
 # Installation
