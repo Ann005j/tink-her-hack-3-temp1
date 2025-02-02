@@ -11,7 +11,7 @@ MEDIA TRACKER🎯
   
 
 ### Hosted Project Link
-[mention your project hosted project link here]
+https://github.com/Ann005j/tink-her-hack-3-temp1
 
 ### Project Description
 Data privacy concerns
@@ -47,17 +47,17 @@ For Software:
 For Software:
 
 # Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
+![https://drive.google.com/file/d/1B5HUWiZDPsIA4XIMegdn4QbNn2-KRfas/view?usp=drive_link](Add screenshot 1 here with proper name)
 *Add caption explaining what this shows*
 
-![Screenshot2](Add screenshot 2 here with proper name)
+![https://drive.google.com/file/d/1B5HUWiZDPsIA4XIMegdn4QbNn2-KRfas/view?usp=drive_link](Add screenshot 2 here with proper name)
 *Add caption explaining what this shows*
 
-![Screenshot3](Add screenshot 3 here with proper name)
+![[https://drive.google.com/file/d/1U9a2ZYpDIIZ7MCWe-UDMulp_LraF9LTd/view?usp=drive_link](Add screenshot 3 here with proper name)
 *Add caption explaining what this shows*
 
 # Diagrams
-![Workflow](Add your workflow/architecture diagram here)
+!](Add your workflow/architecture diagram here)
 *Add caption explaining your workflow*
 
 For Hardware:
@@ -70,7 +70,7 @@ For Hardware:
 *Add caption explaining the schematic*
 
 # Build Photos
-![Team](Add photo of your team here)
+![Team](https://drive.google.com/file/d/1OVDk1Kq0URW-suS7PFP7XHZVa5z6-WHm/view?usp=drive_link)
 
 
 ![Components](Add photo of your components here)
